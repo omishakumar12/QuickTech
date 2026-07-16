@@ -1,0 +1,937 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
+import {
+  ArrowRight,
+  Zap,
+  Snowflake,
+  WashingMachine,
+  Refrigerator,
+  Laptop,
+  Tv,
+  Wrench,
+  Droplets,
+  ShieldCheck,
+  MapPin,
+  Timer,
+  CreditCard,
+  Headphones,
+  Sparkles,
+  Star,
+  Mail,
+  Phone,
+  Send,
+  Plus,
+  Minus,
+} from "lucide-react";
+
+import heroImg from "@/assets/hero-technician.jpg";
+import phoneImg from "@/assets/phone-mockup.jpg";
+import founderImg from "@/assets/founder.jpg";
+import svcElectrician from "@/assets/service-electrician.jpg";
+import svcAc from "@/assets/service-ac.jpg";
+import svcWashing from "@/assets/service-washing.jpg";
+import svcFridge from "@/assets/service-fridge.jpg";
+import svcLaptop from "@/assets/service-laptop.jpg";
+import svcTv from "@/assets/service-tv.jpg";
+import { Reveal, Eyebrow } from "@/components/site/Reveal";
+import { Counter } from "@/components/site/Counter";
+import { CountdownTimer } from "@/components/site/CountdownTimer";
+import { MagneticButton } from "@/components/site/MagneticButton";
+import { ScrollWord } from "@/components/site/ScrollWord";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "QuickTech — Verified Technicians. Trusted Repairs. Delivered Fast." },
+      {
+        name: "description",
+        content:
+          "Book verified technicians for AC, appliance, electrical and handyman repairs. Live tracking, transparent pricing, secure payments.",
+      },
+    ],
+  }),
+  component: HomePage,
+});
+
+const services = [
+  { icon: Zap, name: "Electrician", img: svcElectrician, eta: "10 min", tag: "Certified" },
+  { icon: Snowflake, name: "AC Repair", img: svcAc, eta: "20 min", tag: "All brands" },
+  { icon: WashingMachine, name: "Washing Machine", img: svcWashing, eta: "30 min", tag: "Front & top load" },
+  { icon: Refrigerator, name: "Refrigerator", img: svcFridge, eta: "30 min", tag: "Same day" },
+  { icon: Laptop, name: "Laptop", img: svcLaptop, eta: "45 min", tag: "On-site" },
+  { icon: Tv, name: "Television", img: svcTv, eta: "30 min", tag: "Smart / OLED" },
+];
+
+const steps = [
+  { n: "01", t: "Choose Device", d: "Pick what needs fixing in seconds." },
+  { n: "02", t: "Describe Problem", d: "A few taps. No jargon needed." },
+  { n: "03", t: "Book Appointment", d: "Instant slots. Zero waiting." },
+  { n: "04", t: "Track Live", d: "See your technician approaching." },
+  { n: "05", t: "Repair Completed", d: "Verified, quality-checked, warrantied." },
+  { n: "06", t: "Hassle-free Service", d: "Rate, pay, and forget it." },
+];
+
+const testimonials = [
+  { q: "The technician arrived in 12 minutes. It felt like ordering a cab. Wild.", n: "Aarav Mehta", r: "Ghaziabad · AC Service" },
+  { q: "Finally a repair experience that feels premium. Live tracking is a game-changer.", n: "Priya Sharma", r: "Noida · Refrigerator" },
+  { q: "Transparent pricing. No surprises. My family now trusts only QuickTech.", n: "Rohan Kapoor", r: "Delhi · Electrician" },
+  { q: "Booked at midnight. Fixed by morning. This is the future of home service.", n: "Neha Verma", r: "Gurgaon · Washing Machine" },
+];
+
+function HomePage() {
+  return (
+    <main className="relative overflow-hidden">
+      <Hero />
+      <StatsBand />
+      <ScrollWord words={["Verified", "Fast", "Trusted", "Transparent", "Premium"]} />
+      <ServicesEditorial />
+      <HowItWorks />
+      <AppSection />
+      <WhySection />
+      <StorySection />
+      <TestimonialsMarquee />
+      <FaqSection />
+      <ComingSoonBand />
+      <ContactSection />
+    </main>
+  );
+}
+
+/* ─────────────────────────  HERO  ───────────────────────── */
+function Hero() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  return (
+    <section ref={ref} className="relative min-h-[100svh] px-4 pt-40 pb-24">
+      <div aria-hidden className="absolute inset-0 -z-10 bg-grid" />
+      <div aria-hidden className="absolute inset-0 -z-10" style={{ background: "var(--gradient-hero)" }} />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-noise opacity-[0.05]" />
+
+      {[...Array(24)].map((_, i) => (
+        <motion.span
+          key={i}
+          aria-hidden
+          className="absolute h-1 w-1 rounded-full bg-glow/70 blur-[1px]"
+          style={{ top: `${(i * 37) % 100}%`, left: `${(i * 53) % 100}%` }}
+          animate={{ y: [0, -22, 0], opacity: [0.25, 1, 0.25] }}
+          transition={{ duration: 5 + (i % 6), repeat: Infinity, delay: i * 0.15 }}
+        />
+      ))}
+
+      <motion.div style={{ y, opacity }} className="mx-auto max-w-7xl">
+        <Reveal>
+          <Eyebrow>Where Repairs Meet Reliability</Eyebrow>
+        </Reveal>
+
+        <Reveal delay={0.08}>
+          <h1 className="mt-8 h-editorial text-[clamp(3rem,10vw,10rem)] leading-[0.92]">
+            <span className="text-white">
+              We Connect
+            </span>
+            <br />
+
+            <span className="text-gradient">
+              Homes
+            </span>
+
+            <span className="text-white">
+              {" "}With
+            </span>
+
+            <br />
+
+            <span className="text-gradient">
+              Trusted
+            </span>
+
+            <span className="text-white">
+              {" "}Technicians.
+            </span>
+          </h1>
+        </Reveal>
+
+        <div className="mt-14 grid grid-cols-1 items-end gap-14 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            <Reveal delay={0.15}>
+              <p className="max-w-lg text-lg leading-relaxed text-muted-strong md:text-xl">
+                A premium repair experience for modern homes. Book in seconds. Track live.
+                Pay securely. Delivered by <span className="text-white">background-checked professionals</span>.
+              </p>
+            </Reveal>
+            <Reveal delay={0.22}>
+              <div className="mt-10 flex flex-wrap items-center gap-3">
+                <MagneticButton
+                  as={Link}
+                  to="/coming-soon"
+                  className="btn-glow inline-flex items-center gap-2 rounded-full px-7 py-4 text-sm font-medium"
+                >
+                  Book Early <ArrowRight className="h-4 w-4" />
+                </MagneticButton>
+                <Link
+                  to="/services"
+                  className="group inline-flex items-center gap-2 rounded-full px-5 py-4 text-sm text-white/80 transition hover:text-white"
+                >
+                  <span className="relative">
+                    Explore services
+                    <span className="absolute inset-x-0 -bottom-1 h-px bg-white/40 transition-all group-hover:bg-glow" />
+                  </span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Editorial media block */}
+          <div className="relative">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, ease: [0.2, 0.8, 0.2, 1], delay: 0.2 }}
+              className="relative overflow-hidden rounded-[2rem] border border-white/10"
+            >
+              <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-gradient-to-tr from-primary/40 via-glow/20 to-transparent blur-2xl" />
+              <img
+                src={heroImg}
+                alt="QuickTech technician repairing a washing machine in a modern home"
+                width={1600}
+                height={1200}
+                className="h-[440px] w-full object-cover md:h-[560px]"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
+
+              <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 bg-black/30 px-6 py-4 text-xs backdrop-blur-xl">
+                <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-glow" /> Verified expert on the way</div>
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <span className="grid h-2 w-2 place-items-center rounded-full bg-glow shadow-[0_0_10px_var(--glow)]" />
+                  Live · ETA 12 min
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 6, repeat: Infinity }}
+              className="glass absolute -left-4 top-8 hidden items-center gap-2 rounded-full px-4 py-2 text-xs md:flex"
+            >
+              <Star className="h-3.5 w-3.5 fill-glow text-glow" /> 4.9 · 12,480 reviews
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  STATS BAND  ───────────────────────── */
+function StatsBand() {
+  const items = [
+    { v: 100, s: "+", l: "Verified Technicians" },
+    { v: 1000, s: "+", l: "Homes Served" },
+    { v: 98, s: "%", l: "Satisfaction" },
+    { v: 24, s: "/7", l: "Support" },
+  ];
+  return (
+    <section className="relative border-y border-white/5 px-4 py-20">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 items-end gap-y-12 md:grid-cols-4">
+        {items.map((it, i) => (
+          <Reveal key={i} delay={i * 0.08}>
+            <div className={`px-4 ${i > 0 ? "md:border-l md:border-white/10" : ""}`}>
+              <div className="h-editorial text-6xl text-white md:text-7xl">
+                <span className="text-gradient">
+                  <Counter to={it.v} suffix={it.s} />
+                </span>
+              </div>
+              <div className="mt-3 text-xs uppercase tracking-[0.28em] text-muted-foreground">
+                {it.l}
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  SERVICES EDITORIAL  ───────────────────────── */
+function ServicesEditorial() {
+  return (
+    <section id="services" className="relative section-y px-4">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <Reveal>
+            <Eyebrow>What we fix</Eyebrow>
+            <h2 className="mt-5 h-editorial text-[clamp(2.5rem,6vw,5.5rem)]">
+              Every device.
+              <br />
+              <span className="text-gradient">One tap away.</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="max-w-sm text-muted-foreground">
+              Nine categories. Hundreds of verified specialists. Zero guesswork.
+            </p>
+          </Reveal>
+        </div>
+
+        {/* Big alternating editorial pairs — no card walls */}
+        <div className="mt-24 space-y-40">
+          {services.slice(0, 3).map((s, i) => {
+            const Icon = s.icon;
+            const reverse = i % 2 === 1;
+            return (
+              <Reveal key={s.name}>
+                <div
+                  className={`grid grid-cols-1 items-center gap-y-10 lg:grid-cols-12 lg:gap-x-16 ${reverse ? "" : ""
+                    }`}
+                >
+                  <div className={`lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}>
+                    <div className="group relative overflow-hidden rounded-[2rem]">
+                      <img
+                        src={s.img}
+                        alt={s.name}
+                        loading="lazy"
+                        className="h-[420px] w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06] md:h-[580px]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-background/60 via-transparent to-transparent" />
+                      <div className="absolute left-6 top-6 flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/70">
+                        <Icon className="h-3.5 w-3.5 text-glow" /> {String(i + 1).padStart(2, "0")} / 08
+                      </div>
+                      <div className="absolute inset-x-6 bottom-6 flex items-end justify-between">
+                        <div className="h-editorial text-4xl text-white md:text-6xl">{s.name}</div>
+                        <div className="text-right text-xs uppercase tracking-widest text-white/70">
+                          ETA<br /><span className="text-white">{s.eta}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={`lg:col-span-5 ${reverse ? "lg:order-1 lg:text-right" : ""}`}>
+                    <div className={`text-xs uppercase tracking-[0.3em] text-glow`}>
+                      {s.tag}
+                    </div>
+                    <p className="mt-6 text-2xl leading-snug text-white md:text-3xl">
+                      Verified specialists arrive prepared, work fast, and back every fix with a
+                      service warranty.
+                    </p>
+                    <div className={`mt-8 flex items-center gap-6 text-sm ${reverse ? "lg:justify-end" : ""}`}>
+                      <Link
+                        to="/services"
+                        className="group inline-flex items-center gap-2 text-white"
+                      >
+                        <span className="relative">
+                          Book {s.name}
+                          <span className="absolute inset-x-0 -bottom-1 h-px bg-glow/70" />
+                        </span>
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        {/* Remaining services as a slim editorial list — not cards */}
+        <div className="mt-32 border-t border-white/10">
+          {services.slice(3).map((s, idx) => {
+            const Icon = s.icon;
+            return (
+              <Reveal key={s.name} delay={idx * 0.05}>
+                <Link
+                  to="/services"
+                  className="group relative grid grid-cols-[auto_1fr_auto_auto] items-center gap-6 border-b border-white/10 py-8 md:py-10"
+                >
+                  <div className="w-10 text-xs tabular-nums text-muted-foreground md:w-14">
+                    0{idx + 4}
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <Icon className="h-5 w-5 text-glow" />
+                    <span className="h-editorial text-3xl transition-colors group-hover:text-gradient md:text-5xl">
+                      {s.name}
+                    </span>
+                  </div>
+                  <div className="hidden text-xs uppercase tracking-widest text-muted-foreground md:block">
+                    {s.tag}
+                  </div>
+                  <div className="flex items-center gap-3 text-xs text-white/70">
+                    ETA {s.eta}
+                    <span className="grid h-9 w-9 place-items-center rounded-full border border-white/15 transition-all group-hover:border-glow group-hover:bg-glow/10">
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </div>
+                </Link>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  HOW IT WORKS (editorial rail)  ───────────────────────── */
+function HowItWorks() {
+  return (
+    <section className="relative section-y px-4">
+      <div aria-hidden className="absolute inset-x-0 top-1/2 -z-10 h-[600px] -translate-y-1/2 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(59,130,246,0.12),transparent)]" />
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <div className="mx-auto max-w-3xl text-center">
+            <Eyebrow>How it works</Eyebrow>
+            <h2 className="mt-5 h-editorial text-[clamp(2.4rem,6vw,5rem)]">
+              From tap to fixed.
+              <br />
+              <span className="text-gradient">In minutes.</span>
+            </h2>
+          </div>
+        </Reveal>
+
+        {/* Vertical rail: alternating sides, no repeated card box */}
+        <div className="relative mt-24">
+          <div aria-hidden className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/15 to-transparent md:block" />
+          <ol className="space-y-16 md:space-y-24">
+            {steps.map((s, i) => {
+              const right = i % 2 === 1;
+              return (
+                <Reveal key={s.n}>
+                  <li className={`grid grid-cols-1 items-center gap-6 md:grid-cols-2 ${right ? "" : ""}`}>
+                    <div className={`${right ? "md:order-2 md:pl-16 md:text-left" : "md:pr-16 md:text-right"}`}>
+                      <div className="text-xs uppercase tracking-[0.35em] text-glow">{s.n}</div>
+                      <h3 className="mt-3 h-editorial text-3xl md:text-5xl">{s.t}</h3>
+                      <p className="mt-3 max-w-sm text-muted-foreground md:inline-block">{s.d}</p>
+                    </div>
+                    <div className={`hidden md:flex ${right ? "md:order-1 md:justify-end md:pr-16" : "md:pl-16"}`}>
+                      <div className="relative">
+                        <div className="grid h-14 w-14 place-items-center rounded-full border border-white/15 bg-background text-glow">
+                          <span className="h-2 w-2 rounded-full bg-glow shadow-[0_0_16px_var(--glow)]" />
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </Reveal>
+              );
+            })}
+          </ol>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  APP SECTION  ───────────────────────── */
+function AppSection() {
+  return (
+    <section className="relative overflow-hidden section-y px-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
+        <div className="relative order-2 mx-auto lg:order-1">
+          <div className="absolute -inset-16 -z-10 rounded-full bg-gradient-to-tr from-primary/40 to-glow/20 blur-3xl" />
+          <motion.div
+            animate={{ y: [0, -18, 0] }}
+            transition={{ duration: 6, repeat: Infinity }}
+            className="glow-ring overflow-hidden rounded-[3rem] border border-white/10"
+          >
+            <img
+              src={phoneImg}
+              alt="QuickTech mobile app"
+              loading="lazy"
+              className="h-auto w-[300px] md:w-[380px]"
+            />
+          </motion.div>
+
+          {["Booking", "Tracking", "Payment", "Rated 4.9"].map((t, i) => (
+            <motion.div
+              key={t}
+              className="glass absolute rounded-full px-3 py-1.5 text-xs"
+              style={{
+                top: `${[8, 32, 60, 82][i]}%`,
+                left: i % 2 === 0 ? "-10%" : "auto",
+                right: i % 2 === 1 ? "-10%" : "auto",
+              }}
+              animate={{ y: [0, i % 2 ? 10 : -10, 0] }}
+              transition={{ duration: 5 + i, repeat: Infinity }}
+            >
+              {t}
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="order-1 lg:order-2">
+          <Reveal>
+            <Eyebrow>Built for your pocket</Eyebrow>
+            <h2 className="mt-5 h-editorial text-[clamp(2.4rem,6vw,5rem)]">
+              A repair studio,
+              <br />
+              <span className="text-gradient">in your palm.</span>
+            </h2>
+            <p className="mt-6 max-w-md text-lg text-muted-strong">
+              Booking, tracking, payments and history — every step crafted for speed and
+              clarity. Beautiful by default.
+            </p>
+
+            {/* No cards — inline editorial spec list */}
+            <dl className="mt-10 space-y-5 border-t border-white/10 pt-8">
+              {[
+                ["Instant booking", "Under 30 seconds"],
+                ["Live map tracking", "GPS accurate"],
+                ["Verified pros", "Background-checked"],
+                ["Secure pay", "UPI · Card · Wallet"],
+              ].map(([k, v]) => (
+                <div key={k} className="grid grid-cols-[1fr_auto] items-baseline gap-6 border-b border-white/5 pb-4">
+                  <dt className="text-lg text-white">{k}</dt>
+                  <dd className="text-sm uppercase tracking-widest text-muted-foreground">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  WHY (editorial numbered)  ───────────────────────── */
+function WhySection() {
+  const items = [
+    { i: ShieldCheck, t: "Verified Professionals", d: "Background, skill and identity checks — for every technician." },
+    { i: Timer, t: "10-Minute Arrival", d: "Nearest expert dispatched instantly with live ETA." },
+    { i: MapPin, t: "Live Tracking", d: "Follow your technician block by block, from door to done." },
+    { i: Sparkles, t: "Transparent Pricing", d: "Upfront quotes. No surprises. Ever." },
+    { i: ShieldCheck, t: "Secure Payments", d: "Encrypted UPI, card and wallet." },
+    { i: Headphones, t: "24 × 7 Support", d: "Real humans, always on. In your language." },
+  ];
+  return (
+    <section className="relative section-y px-4">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[0.9fr_1.1fr]">
+          <Reveal>
+            <Eyebrow>Why QuickTech</Eyebrow>
+            <h2 className="mt-5 h-editorial text-[clamp(2.4rem,6vw,5.5rem)]">
+              Built on trust.
+              <br />
+              <span className="text-gradient">Powered by tech.</span>
+            </h2>
+            <p className="mt-6 max-w-sm text-muted-strong">
+              Six commitments, engineered into every booking — from the first tap to the
+              last handshake.
+            </p>
+          </Reveal>
+
+          <div className="border-t border-white/10">
+            {items.map(({ i: Icon, t, d }, idx) => (
+              <Reveal key={t} delay={idx * 0.06}>
+                <div className="group grid grid-cols-[auto_1fr_auto] items-start gap-6 border-b border-white/10 py-8 md:py-10">
+                  <div className="w-10 text-xs tabular-nums text-muted-foreground md:w-14">
+                    0{idx + 1}
+                  </div>
+                  <div>
+                    <div className="h-editorial text-2xl md:text-4xl">{t}</div>
+                    <p className="mt-2 max-w-lg text-sm text-muted-foreground">{d}</p>
+                  </div>
+                  <Icon className="mt-1 h-5 w-5 text-glow opacity-70 transition-opacity group-hover:opacity-100" />
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  STORY  ───────────────────────── */
+function StorySection() {
+  return (
+    <section className="relative section-y px-4">
+      <div className="mx-auto max-w-7xl">
+
+        <Reveal>
+          <Eyebrow>Our Story</Eyebrow>
+        </Reveal>
+
+        <div className="mt-8 grid grid-cols-1 gap-20 lg:grid-cols-[1.15fr_0.85fr]">
+
+          {/* LEFT */}
+          <Reveal>
+            <div>
+              <h2 className="h-editorial text-[clamp(3rem,6vw,6rem)] leading-[0.95]">
+                A student's mission
+                <br />
+                to <span className="text-gradient">redefine</span>
+                <br />
+                <span className="text-gradient">home repair.</span>
+              </h2>
+
+              <p className="mt-10 max-w-2xl text-xl leading-9 text-muted-strong">
+                "I'm <span className="text-white">Omisha</span>, a
+                <span className="text-white"> Class 9 student</span> from
+                <span className="text-white"> Gurukul School, Ghaziabad</span>.
+                I started QuickTech to make repairs faster, more reliable and
+                accessible through verified technicians and modern technology."
+              </p>
+
+              <div className="mt-16 grid grid-cols-1 gap-10 border-t border-white/10 pt-10 md:grid-cols-3">
+
+                <div>
+                  <div className="text-xs uppercase tracking-[0.35em] text-glow">
+                    Mission
+                  </div>
+
+                  <p className="mt-4 text-lg text-white/90">
+                    Simplify home repairs with technology.
+                  </p>
+                </div>
+
+                <div>
+                  <div className="text-xs uppercase tracking-[0.35em] text-glow">
+                    Vision
+                  </div>
+
+                  <p className="mt-4 text-lg text-white/90">
+                    India's most trusted home service platform.
+                  </p>
+                </div>
+
+                <div>
+                  <div className="text-xs uppercase tracking-[0.35em] text-glow">
+                    Values
+                  </div>
+
+                  <p className="mt-4 text-lg text-white/90">
+                    Trust • Speed • Innovation • Customer First
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+          </Reveal>
+
+          {/* RIGHT */}
+
+          <Reveal delay={0.1}>
+            <div className="sticky top-32">
+
+              <div className="glass rounded-[2rem] border border-white/10 p-10">
+
+                <div className="text-[10px] uppercase tracking-[0.35em] text-glow">
+                  Founder
+                </div>
+
+                <h3 className="mt-5 h-editorial text-5xl">
+                  Omisha
+                </h3>
+
+                <div className="mt-8 space-y-6">
+
+                  <div className="border-b border-white/10 pb-5">
+                    <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                      Education
+                    </div>
+
+                    <div className="mt-2 text-lg text-white">
+                      Class 9
+                    </div>
+                  </div>
+
+                  <div className="border-b border-white/10 pb-5">
+                    <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                      School
+                    </div>
+
+                    <div className="mt-2 text-lg text-white">
+                      Gurukul School
+                    </div>
+                  </div>
+
+                  <div className="border-b border-white/10 pb-5">
+                    <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                      Location
+                    </div>
+
+                    <div className="mt-2 text-lg text-white">
+                      Ghaziabad, IN
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                      Role
+                    </div>
+
+                    <div className="mt-2 text-lg text-white">
+                      Founder, QuickTech
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </Reveal>
+
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  TESTIMONIALS (spotlight + marquee)  ───────────────────────── */
+function TestimonialsMarquee() {
+  return (
+    <section className="relative section-y">
+      <div className="mx-auto max-w-7xl px-4">
+        <Reveal>
+          <Eyebrow>What people say</Eyebrow>
+          <div className="mt-8 grid grid-cols-1 items-end gap-10 lg:grid-cols-[1.1fr_1fr]">
+            <p className="h-editorial text-4xl leading-[1.05] md:text-6xl">
+              <span className="text-white">"Finally a repair experience that feels premium.</span>
+              <br />
+              <span className="text-gradient">Live tracking is a game-changer."</span>
+            </p>
+            <div className="text-sm">
+              <div className="flex gap-1 text-glow">
+                {[...Array(5)].map((_, k) => (
+                  <Star key={k} className="h-4 w-4 fill-glow" />
+                ))}
+              </div>
+              <div className="mt-4 text-white">Priya Sharma</div>
+              <div className="text-muted-foreground">Noida · Refrigerator repair</div>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+
+      <div className="relative mt-20 marquee-mask">
+        <motion.div
+          className="flex gap-6 pl-4"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+        >
+          {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
+            <div key={i} className="glass w-[380px] shrink-0 rounded-3xl p-6">
+              <div className="flex gap-1 text-glow">
+                {[...Array(5)].map((_, k) => (
+                  <Star key={k} className="h-4 w-4 fill-glow" />
+                ))}
+              </div>
+              <p className="mt-4 text-[0.95rem] leading-relaxed text-white/90">"{t.q}"</p>
+              <div className="mt-6 flex items-center gap-3">
+                <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-primary to-glow font-medium text-white">
+                  {t.n[0]}
+                </div>
+                <div>
+                  <div className="text-sm font-medium">{t.n}</div>
+                  <div className="text-xs text-muted-foreground">{t.r}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  FAQ (bare editorial accordion)  ───────────────────────── */
+function FaqSection() {
+  const items: [string, string][] = [
+    ["When will QuickTech launch?", "We're onboarding technicians across NCR now. Public launch is weeks away — join Early Access to be first."],
+    ["How are technicians verified?", "Identity, background, skill assessment and mandatory training. Every job is quality-checked."],
+    ["Will there be an app?", "Yes — a native iOS and Android app launches with the public rollout. Booking, live tracking, payments, history."],
+    ["Can businesses use QuickTech?", "Absolutely. QuickTech Business supports offices, cafés, salons and property managers with priority SLAs."],
+  ];
+  return (
+    <section className="relative section-y px-4">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+        <Reveal>
+          <Eyebrow>FAQ</Eyebrow>
+          <h2 className="mt-5 h-editorial text-[clamp(2.4rem,6vw,5rem)]">
+            Quick answers.
+            <br />
+            <span className="text-gradient">Zero fine print.</span>
+          </h2>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <Accordion type="single" collapsible className="w-full">
+            {items.map(([q, a], i) => (
+              <AccordionItem key={i} value={`i${i}`} className="border-b border-white/10">
+                <AccordionTrigger className="group py-7 text-left text-xl font-medium text-white hover:no-underline md:text-2xl [&>svg]:hidden">
+                  <span className="flex w-full items-center justify-between gap-6">
+                    <span className="pr-6">{q}</span>
+                    <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/15 text-glow transition-colors group-hover:border-glow">
+                      <Plus className="h-4 w-4 group-data-[state=open]:hidden" />
+                      <Minus className="hidden h-4 w-4 group-data-[state=open]:block" />
+                    </span>
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="pb-8 pr-16 text-base text-muted-strong">
+                  {a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  COMING SOON BAND  ───────────────────────── */
+function ComingSoonBand() {
+  return (
+    <section className="relative section-y px-4">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border border-white/10 p-10 md:p-16">
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/50 via-primary/20 to-background" />
+        <div aria-hidden className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-glow/40 blur-[100px]" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-noise opacity-[0.05]" />
+
+        <Reveal>
+          <Eyebrow>Countdown</Eyebrow>
+          <h2 className="mt-5 h-editorial text-[clamp(2.4rem,7vw,5.5rem)]">
+            Something big <span className="text-gradient">is coming.</span>
+          </h2>
+          <p className="mt-4 max-w-xl text-lg text-muted-strong">
+            Join before launch. Get lifetime priority booking and exclusive early rates.
+          </p>
+        </Reveal>
+
+        <div className="mt-12">
+          <CountdownTimer />
+        </div>
+
+        <Reveal delay={0.2}>
+          <div className="mt-10 flex flex-wrap gap-3">
+            <MagneticButton
+              as="a"
+              href="#join"
+              className="btn-glow inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium"
+            >
+              Get Early Access <ArrowRight className="h-4 w-4" />
+            </MagneticButton>
+            <Link
+              to="/coming-soon"
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-medium backdrop-blur hover:bg-white/10"
+            >
+              View roadmap
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────  CONTACT (single)  ───────────────────────── */
+function ContactSection() {
+  const [loading, setLoading] = useState(false);
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      (e.target as HTMLFormElement).reset();
+      toast.success("Message sent. We'll reply within a business day.");
+    }, 900);
+  };
+
+  return (
+    <section id="contact" className="relative section-y px-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-14 lg:grid-cols-2">
+        <Reveal>
+          <Eyebrow>Contact</Eyebrow>
+          <h2 className="mt-5 h-editorial text-[clamp(2.4rem,6vw,5.5rem)]">
+            Let's talk.
+          </h2>
+          <p className="mt-6 max-w-md text-lg text-muted-strong">
+            Partnerships, press, support — we read every message and reply within a business day.
+          </p>
+
+          <div className="mt-12 space-y-6 border-t border-white/10 pt-8">
+            <a href="mailto:quicktech.contactus@gmail.com" className="group flex items-center justify-between gap-6 border-b border-white/5 pb-6">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.3em] text-glow">Email</div>
+                <div className="mt-2 h-editorial text-2xl text-white transition-colors group-hover:text-gradient md:text-3xl">
+                  quicktech.contactus@gmail.com
+                </div>
+              </div>
+              <Mail className="h-5 w-5 text-white/60 transition-transform group-hover:-translate-y-0.5 group-hover:text-glow" />
+            </a>
+            <a href="tel:+919311025350" className="group flex items-center justify-between gap-6">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.3em] text-glow">Phone</div>
+                <div className="mt-2 h-editorial text-2xl text-white transition-colors group-hover:text-gradient md:text-3xl">
+                  +91 9311025350
+                </div>
+              </div>
+              <Phone className="h-5 w-5 text-white/60 transition-transform group-hover:-translate-y-0.5 group-hover:text-glow" />
+            </a>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <form onSubmit={submit} className="glass rounded-[2rem] p-6 md:p-10">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <FieldInput name="name" label="Name" placeholder="Your name" />
+              <FieldInput name="email" label="Email" type="email" placeholder="you@example.com" />
+              <FieldInput name="phone" label="Phone" placeholder="+91 …" />
+              <FieldInput name="subject" label="Subject" placeholder="How can we help?" />
+              <div className="md:col-span-2">
+                <label className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Message</label>
+                <textarea
+                  name="message"
+                  rows={5}
+                  required
+                  className="mt-3 w-full resize-none border-0 border-b border-white/10 bg-transparent px-0 py-3 text-base outline-none transition focus:border-glow"
+                  placeholder="Tell us what you need…"
+                />
+              </div>
+            </div>
+            <MagneticButton
+              type="submit"
+              disabled={loading}
+              className="btn-glow mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-sm font-semibold disabled:opacity-60"
+            >
+              {loading ? "Sending…" : (<>Send Message <Send className="h-4 w-4" /></>)}
+            </MagneticButton>
+          </form>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* Underlined editorial input */
+function FieldInput({
+  name, label, type = "text", placeholder,
+}: { name: string; label: string; type?: string; placeholder?: string }) {
+  return (
+    <div>
+      <label className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+        {label}
+      </label>
+      <input
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        required
+        className="mt-3 w-full border-0 border-b border-white/10 bg-transparent px-0 py-3 text-base outline-none transition placeholder:text-white/25 focus:border-glow"
+      />
+    </div>
+  );
+}
